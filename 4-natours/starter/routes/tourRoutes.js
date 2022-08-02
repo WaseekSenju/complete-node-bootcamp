@@ -5,9 +5,7 @@ const router = express.Router();
 
 //router.param('id', tourController.checkId);
 
-router.route('top-5-cheap').get(
-  
-);
+router.route('/top-5-cheap').get(tourController.alisasTopTour,tourController.getAllTours);
 
 router
   .route('/')
@@ -17,4 +15,6 @@ router
   .route('/:id')
   .get(tourController.getTour)
   .patch(tourController.updateTour)
-  .delete(tourController.
+  .delete(tourController.deleteTour);
+
+module.exports = router;
