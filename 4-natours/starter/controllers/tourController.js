@@ -80,7 +80,6 @@ class APIFeatures {
   }
 }
 
-
 exports.alisasTopTour = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
@@ -91,13 +90,12 @@ exports.alisasTopTour = (req, res, next) => {
 exports.getAllTours = async (req, res) => {
   try {
     //3-Exececuting Query
-    const features = new APIFeatures();
-    features(Tour.find(),req.query).
-    filter()
-    .sort()
-    .limit()
-    .page();
-   
+    const features = new APIFeatures(Tour.find(), req.query)
+      .filter()
+      .sort()
+      .limit()
+      .page();
+
     const tours = await features.query;
 
     res.status(200).json({
