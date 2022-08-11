@@ -1,7 +1,7 @@
-const exp = require('constants');
 const express = require('express');
-
 const morgan = require('morgan');
+const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controllers/errorController');
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -10,7 +10,7 @@ const app = express();
 
 //1- Middlwares
 console.log(process.env.NODE_ENV);
-if(process.env.NODE_ENV ==='development'){
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
@@ -24,10 +24,10 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   req.requsetTime = new Date().toISOString();
+  console.log(req.headers.authorization);
   console.log(req.requsetTime);
   next();
 });
-
 
 //2- Routes Handler
 // const getAllTours = (req, res) => {
@@ -136,11 +136,9 @@ app.use((req, res, next) => {
 //   });
 // };
 
-
 // //3- Routes
 // const tourRouter = express.Router();
 // const userRouter = express.Router();
-
 
 // //We refactored it
 // // //app.get('/api/v1/tours', getAllTours);
@@ -156,16 +154,19 @@ app.use((req, res, next) => {
 //   .patch(updateTour)
 //   .delete(deleteTour);
 
-
 // userRouter.route('/').get(getAllUsers).post(createUser);
 // userRouter
 //   .route('/:id')
 //   .get(getUser)
 //   .patch(updateUser)
- // .delete(deleteUser);
+// .delete(deleteUser);
 
-app.use('/api/v1/tours',tourRouter);
-app.use('/api/v1/users',userRouter);
-  
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
 
+app.all('*', (req, res, next) => {
+  next(new Error(`Cant find the ${req.originalUrl} on this server`), 404);
+});
+
+app.use(globalErrorHandler);
 module.exports = app;
