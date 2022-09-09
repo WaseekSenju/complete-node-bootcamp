@@ -11,7 +11,8 @@ router
   .get(tourController.alisasTopTour, tourController.getAllTours);
 router.route('/tour-stats').get(tourController.getTourStats);
 router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
-//You could have also put the catchAsyc function here but that is much better there
+
+//You could have also put the catchAsync function here but that is much better there
 router
   .route('/')
   .get(authController.protect, tourController.getAllTours)
